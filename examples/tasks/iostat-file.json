@@ -2,7 +2,7 @@
     "version": 1,
     "schedule": {
         "type": "simple",
-        "interval": "500ms"
+        "interval": "3s"
     },
     "workflow": {
         "collect": {
@@ -10,6 +10,7 @@
                 "/intel/linux/iostat/avg-cpu/%user": {},
                 "/intel/linux/iostat/avg-cpu/%system": {},
                 "/intel/linux/iostat/avg-cpu/%idle": {},
+                "/intel/linux/iostat/avg-cpu/%util": {},
                 "/intel/linux/iostat/avg-cpu/%iowait": {},
                 "/intel/linux/iostat/avg-cpu/%nice": {},
                 "/intel/linux/iostat/avg-cpu/%steal": {},

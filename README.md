@@ -93,7 +93,7 @@ Namespace | Description
 %iowait | The percentage of time that the CPU or CPUs were idle during which the system had an outstanding disk I/O request
 %steal | The percentage of time spent in involuntary wait by the virtual CPU or CPUs while the hypervisor was servicing another virtual processor
 %idle | The percentage of time that the CPU or CPUs were idle and the systems did not have an outstanding disk I/O request
-
+%util | This is equal to 100%-%idle
 
 
 * **Device statistics**

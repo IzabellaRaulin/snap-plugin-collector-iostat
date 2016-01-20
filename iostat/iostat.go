@@ -163,3 +163,4 @@ func getArgs(mts []plugin.PluginMetricType) []string {
 func joinNamespace(ns []string) string {
 	return "/" + strings.Join(ns, "/")
 }
+

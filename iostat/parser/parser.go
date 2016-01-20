@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"math"
 	"io"
 	"os"
 	"strconv"
@@ -57,6 +58,17 @@ func (p *parser) Parse(reader io.Reader) ([]string, map[string]float64, error) {
 			}).Debug("failed to parse line")
 		}
 	}
+	
+	
+	fmt.Fprintln(os.Stderr, "Iza, p.key=%s", p.keys)
+	fmt.Fprintln(os.Stderr, "Iza, p.data=%s", p.data)
+	
+	// add cpu metric `%util` which is equal to '100%-%idle'
+	keyCpuUtil := joinNamespace(createNamespace("avg-cpu/%util"))
+	keyCpuIdle := strings.Replace(keyCpuUtil, "util", "idle", 1)
+	
+	p.keys = append(p.keys, keyCpuUtil)
+	p.data[keyCpuUtil] = roundToPlaces(100-p.data[keyCpuIdle], 2)
 
 	return p.keys, p.data, nil
 }
@@ -78,6 +90,7 @@ func (p *parser) parse(data string) error {
 		p.titleLine = false
 		return nil
 	}
+	
 	if p.firstLine {
 		//next interval separated by a newline
 		p.firstLine = false
@@ -175,7 +188,19 @@ func joinNamespace(ns []string) string {
 	return "/" + strings.Join(ns, "/")
 }
 
-// createNamespace returns namespace slice of strings composed from: vendor, class, type and ceph-daemon name
+// createNamespace returns namespace slice of strings composed from: vendor, class, type and metric name
 func createNamespace(name string) []string {
 	return []string{NsVendor, NsClass, NsType, name}
 }
+
+// round  returns the integral value that is nearest to x
+func round(x float64) float64 {
+	return math.Floor(x + 0.5)
+}
+
+// roundToPlaces returns the value that is nearest to x rounded to the certain decimal places
+func roundToPlaces(x float64, places int) float64 {
+	shift := math.Pow(10, float64(places))
+	return round(x*shift) / shift
+}
+
